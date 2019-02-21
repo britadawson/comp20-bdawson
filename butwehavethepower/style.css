@@ -1,14 +1,16 @@
 /* style sheet for lab5 */ 
 
-
+body {
+    background-color: lightslategrey;
+}
 #title {
-    color: orangered;
+    color: maroon;
     font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
     text-align: center;
 }
 
 #lyrics {
-    color: orangered;
+    color: maroon;
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     text-align: center;
     margin-top: 10px;
