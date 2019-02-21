@@ -1,0 +1,21 @@
+/* style sheet for lab5 */ 
+
+
+#title {
+    color: orangered;
+    font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
+    text-align: center;
+}
+
+#lyrics {
+    color: orangered;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    text-align: center;
+    margin-top: 10px;
+}
+
+video {
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+}

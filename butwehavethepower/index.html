@@ -14,7 +14,94 @@
 <div id="lyrics"></div>
 
 <script>
-	// Complete this section and create a CSS file named style.css
+	var lyrics = document.getElementById("lyrics");
+    var wehavethepower = document.getElementById("butwehavethepower");
+
+    wehavethepower.addEventListener("timeupdate", function() {
+        if (wehavethepower.currentTime < 6) {
+            lyrics.innerHTML = "Lisa singing:";
+        }
+        else if (wehavethepower.currentTime > 6 && wehavethepower.currentTime < 8.25) {
+            lyrics.innerHTML = "Come gather round, children,";
+        }
+        else if (wehavethepower.currentTime > 8.25 && wehavethepower.currentTime < 10.75) {
+            lyrics.innerHTML = "It's high time ye learned";
+        }
+        else if (wehavethepower.currentTime > 10.75 && wehavethepower.currentTime <13) {
+            lyrics.innerHTML = "'Bout a hero named Homer";
+        }
+        else if (wehavethepower.currentTime > 13 && wehavethepower.currentTime < 16.5) {
+            lyrics.innerHTML = "And a devil named Burns";
+        }
+        else if (wehavethepower.currentTime > 16.5 && wehavethepower.currentTime < 19) {
+            lyrics.innerHTML = "We'll march 'till we drop";
+        }
+        else if (wehavethepower.currentTime > 19 && wehavethepower.currentTime < 21.5) {
+            lyrics.innerHTML = "The girls and the fellas.";
+        }
+        else if (wehavethepower.currentTime > 21.5 && wehavethepower.currentTime < 23.25) {
+            lyrics.innerHTML = "We'll fight 'till the death";
+        }
+        else if (wehavethepower.currentTime > 23.25 && wehavethepower.currentTime < 27.5) {
+            lyrics.innerHTML = "Or else fold like umbrellas.";
+        }
+        else if (wehavethepower.currentTime > 27.5 && wehavethepower.currentTime < 37) {
+            lyrics.innerHTML = "";
+        }
+        else if (wehavethepower.currentTime > 37 && wehavethepower.currentTime < 40.5) {
+            lyrics.innerHTML = "So we'll march day and night";
+        } 
+        else if (wehavethepower.currentTime > 40.5 && wehavethepower.currentTime < 43) {
+            lyrics.innerHTML = "By the big cooling tower.";
+        } 
+        else if (wehavethepower.currentTime > 43 && wehavethepower.currentTime < 45.25) {
+            lyrics.innerHTML = "They have the plant";
+        } 
+        else if (wehavethepower.currentTime > 45.25 && wehavethepower.currentTime < 49) {
+            lyrics.innerHTML = "But we have the power.";
+        }
+        else if (wehavethepower.currentTime > 49 && wehavethepower.currentTime < 52.5) {
+            lyrics.innerHTML = "";
+        }
+        else if (wehavethepower.currentTime > 52.5 && wehavethepower.currentTime < 55) {
+            lyrics.innerHTML = '"Lenny: Now do Classical Gas!"';
+        }
+        else if (wehavethepower.currentTime > 55 && wehavethepower.currentTime < 68) {
+            lyrics.innerHTML = "";
+        }
+        else if (wehavethepower.currentTime > 68 && wehavethepower.currentTime < 72.5) {
+            lyrics.innerHTML = "Lisa singing:";
+        }
+        else if (wehavethepower.currentTime > 72.5 && wehavethepower.currentTime < 75) {
+            lyrics.innerHTML = "So we'll march day and night";
+        }
+        else if (wehavethepower.currentTime > 75 && wehavethepower.currentTime < 77.5) {
+            lyrics.innerHTML = "By the big cooling tower.";
+        }
+        else if (wehavethepower.currentTime > 77.5 && wehavethepower.currentTime < 79.75) {
+            lyrics.innerHTML = "They have the plant";
+        }
+        else if (wehavethepower.currentTime > 79.75 && wehavethepower.currentTime < 82) {
+            lyrics.innerHTML = "But we have the power.";
+        }
+        else if (wehavethepower.currentTime > 82 && wehavethepower.currentTime < 84.25) {
+            lyrics.innerHTML = "So we'll march day and night";
+        }
+        else if (wehavethepower.currentTime > 84.25 && wehavethepower.currentTime < 87) {
+            lyrics.innerHTML = "By the big cooling tower.";
+        }
+        else if (wehavethepower.currentTime > 87 && wehavethepower.currentTime < 89) {
+            lyrics.innerHTML = "They have the plant";
+        }
+        else if (wehavethepower.currentTime > 89 && wehavethepower.currentTime < 91.5) {
+            lyrics.innerHTML = "But we have the power.";
+        }
+        else {
+            lyrics.innerHTML = "";
+        }
+    }
+    );
+    
 </script>
 </body>
 </html>	
