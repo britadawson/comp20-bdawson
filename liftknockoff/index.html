@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" >
+    <link rel="stylesheet" href="style.css" type="text/css">
+    <title>Car Service</title>
+</head>
+
+<body>
+
+    <div id="map"></div>
+    
+    <script>
+        var map;
+
+        function initMap() {
+            map = new google.maps.Map(document.getElementById('map'), {center: {lat: 42.5, lng: -71}, zoom: 10});
+        }
+    </script>
+
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyC9sQaGQMUn1TEZG3C11LjRlpQAppS4WGk&callback=initMap" async defer></script> 
+    <!-- link with my API key: (error keeps telling me I need to activate it?)-->
+    <!-- <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBwUBWoCug3Rd4myBqKkSHOAc2rCWEYiO0&callback=initMap" async defer></script> -->
+</body>
+</html>
