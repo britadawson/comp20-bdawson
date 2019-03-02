@@ -4,22 +4,70 @@
     <meta charset="utf-8" >
     <link rel="stylesheet" href="style.css" type="text/css">
     <title>Car Service</title>
+
+    <script>
+            var map;
+    
+            function initMap() {
+                map = new google.maps.Map(document.getElementById('map'), {center: {lat: 42.5, lng: -71}, zoom: 10});
+            }
+            console.log("initialized map");
+        </script>
+    
+        <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyC9sQaGQMUn1TEZG3C11LjRlpQAppS4WGk&callback=initMap" async defer></script> 
+        <!-- link with my API key: (error keeps telling me I need to activate it?)-->
+        <!-- <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBwUBWoCug3Rd4myBqKkSHOAc2rCWEYiO0&callback=initMap" async defer></script> -->
+    
+    <!--function isn't running and location isn't being grabbed-->
+    <script>
+        var lat = 000;
+        var lng = 000;
+            console.log("before getlocation");
+        function getLocation() {
+            console.log("in getlocation");
+            navigator.geolocation.getCurrentPosition(function(position){
+                lat = position.coords.latitude;
+                lng = position.coords.longitude;
+                console.log("lat is " + lat);
+            });
+        }
+        console.log("after getlocation");
+    </script>
+    
+ 
+     <script>
+                console.log("hi 1");
+        var username = "VFadwaWF";
+                console.log("hi 2 and username is " + username);
+        request = new XMLHttpRequest();
+    
+        request.open("POST", "https://hans-moleman.herokuapp.com/rides", true);
+                console.log("hi 3");
+
+        // request.setRequestHeader();
+                console.log("hi 4");
+        request.onreadystatechange = function() {
+                    console.log("in onreadystatechange");
+            if (request.readyState == 4 && request.status == 200) {
+                passengers = JSON.parse(request.responseText);
+                user = document.getElementById("username");
+                latitude = document.getElementById("lat");
+                longitude = document.getElementById("lng");
+                console.log("user is" + user);
+                //user is null, still having trouble parsing the json response
+            }
+        }
+
+        request.send("username="+username+"&lat="+lat+"&lng="+lng);
+                console.log("fin");
+    </script> 
 </head>
 
 <body>
 
     <div id="map"></div>
     
-    <script>
-        var map;
 
-        function initMap() {
-            map = new google.maps.Map(document.getElementById('map'), {center: {lat: 42.5, lng: -71}, zoom: 10});
-        }
-    </script>
-
-    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyC9sQaGQMUn1TEZG3C11LjRlpQAppS4WGk&callback=initMap" async defer></script> 
-    <!-- link with my API key: (error keeps telling me I need to activate it?)-->
-    <!-- <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBwUBWoCug3Rd4myBqKkSHOAc2rCWEYiO0&callback=initMap" async defer></script> -->
+    <h1>hi world</h1>
 </body>
 </html>
