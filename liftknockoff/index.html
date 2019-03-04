@@ -13,7 +13,6 @@
                  map = new google.maps.Map(document.getElementById('map'), {center: {lat: 42.405, lng: -71.119}, zoom: 15});
                  //use mapOptions to change the lat and long to make more sense later
                  getLocation();
-                 receiveLocations();
             }
             
             function getLocation() {
@@ -22,7 +21,7 @@
                     console.log("in position");
                 myLat = position.coords.latitude;
                 myLng = position.coords.longitude;
-                renderMap();
+                receiveLocations();
                 console.log("lat and lng are " + myLat + ", " + myLng);
                 });
             }
@@ -30,58 +29,79 @@
             function renderMap() {
                 var me = new google.maps.LatLng(myLat, myLng);
                 var infoWindow = new google.maps.InfoWindow();
-
-                //add images for myself and the weinermobile and vehicles when i get that far
-                var image = {
-                    url: 'me.png',
-                };
+               
                 console.log("in render");
                 map.panTo(me);
                 console.log("creating a marker");
-                var marker = new google.maps.Marker({
+                var myMarker = new google.maps.Marker({
                     position: me,
-                    icon: image,
+                    icon: 'me.png',
                     title: "Brita!!"
                 });
 
-                marker.setMap(map);
+                myMarker.setMap(map);
                 var content = '<p>Username: VFadwaWF</br>Location: ' + myLat + ', '+ myLng + '</p>';
                 
-                google.maps.event.addListener(marker, 'click', function(){
+                google.maps.event.addListener(myMarker, 'click', function(){
                     infoWindow.setContent(content);
-                    infoWindow.open(map, marker);
+                    infoWindow.open(map, myMarker);
                 });
+                console.log("before calling receive locations: lat and lng are " + myLat + ", " + myLng);
             }
 
             // not receiving json data
             function receiveLocations() {
-                console.log("hi 1");
                 request = new XMLHttpRequest();
-                console.log("hi 2");
-                
+     
                 request.open("POST", "https://hans-moleman.herokuapp.com/rides", true);
-                console.log("hi 3");
+    
                 request.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
-                console.log("hi 4");
+   
                 request.onreadystatechange = function() {
-                console.log("hi 5");
                     if (request.readyState == 4 && request.status == 200) {
-                        console.log("hi 6");
-                        passengers = JSON.parse(request.responseText);
-                        console.log("hi 7");
-                        locations = document.getElementById("requests");
-                        console.log("hi 7.5");
-                        console.log("there are " + passengers.length + " passengers");
-                        for (i=0; i<passengers.length; i++) {
-                            console.log("hi 8");
-                            locations.innerHTML += "<p>" + passengers[i].username + " location is " + passengers[i].lat + ", " + passengers[i].lng + "</p>";
+                        pplAndPlace = JSON.parse(request.responseText);
+                        console.log(pplAndPlace);
+                        console.log(pplAndPlace.vehicles.length);
+                        var count;
+                        for (count=0; count < pplAndPlace.vehicles.length; count++){
+                            console.log("for loop");
+                            if (pplAndPlace.vehicles[count].username == "WEINERMOBILE"){
+                                console.log("if weinermobile");
+                                var weinerMarker = new google.maps.Marker({
+                                    position: new google.maps.LatLng(pplAndPlace.vehicles[count].lat, pplAndPlace.vehicles[count].lng),
+                                    icon: 'weinermobile.png',
+                                    title: "WEINERMOBILE"
+                                });
+                                weinerMarker.setMap(map);
+                                var content = '<p>Username: ' + pplAndPlace.vehicles[count].username + '</br>Distance from me: </p>';
+                                var infoWindow = new google.maps.InfoWindow();
+                                google.maps.event.addListener(weinerMarker, 'click', function(){
+                                    infoWindow.setContent(content);
+                                    infoWindow.open(map, weinerMarker);
+                                });
+                            } else {
+                                var vehicleMarker = new google.maps.Marker({
+                                    position: new google.maps.LatLng(pplAndPlace.vehicles[count].lat, pplAndPlace.vehicles[count].lng),
+                                    icon: 'car.png',
+                                    title: "Vehicle"
+                                });
+                                vehicleMarker.setMap(map);
+                                var content = '<p>Username: ' + pplAndPlace.vehicles[count].username + '</br>Distance from me: </p>';
+                                var infoWindow = new google.maps.InfoWindow();
+                                google.maps.event.addListener(vehicleMarker, 'click', function(){
+                                    infoWindow.setContent(content);
+                                    infoWindow.open(map, vehicleMarker);
+                                });
+                                console.log("in vehicle marker setup");
+                            }
                         }
+                        console.log("after for loop");
                     }
                 }
-                console.log("hi 9");
+                console.log("mylat: " + myLat + " mylng: " + myLng);
                 request.send("username=VFadwaWF&lat="+myLat+"&lng="+myLng);
-                console.log("hi 10"); 
-            }
+                renderMap();
+            } 
     </script> 
     
     <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyC9sQaGQMUn1TEZG3C11LjRlpQAppS4WGk&callback=initMap" async defer></script> 
@@ -90,9 +110,8 @@
 
 </head>
 
-<body>
+<body onload="initMap()">
     <div id="map"></div>
-
     <h1>hi world</h1>
 </body>
 </html>
