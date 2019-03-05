@@ -59,43 +59,71 @@
    
                 request.onreadystatechange = function() {
                     if (request.readyState == 4 && request.status == 200) {
-                        pplAndPlace = JSON.parse(request.responseText);
-                        console.log(pplAndPlace);
-                        console.log(pplAndPlace.vehicles.length);
+                        info = JSON.parse(request.responseText);
+                        console.log(info);
+                        console.log(info.vehicles.length);
                         var count;
-                        for (count=0; count < pplAndPlace.vehicles.length; count++){
-                            console.log("for loop");
-                            if (pplAndPlace.vehicles[count].username == "WEINERMOBILE"){
-                                console.log("if weinermobile");
-                                var weinerMarker = new google.maps.Marker({
-                                    position: new google.maps.LatLng(pplAndPlace.vehicles[count].lat, pplAndPlace.vehicles[count].lng),
-                                    icon: 'weinermobile.png',
-                                    title: "WEINERMOBILE"
-                                });
-                                weinerMarker.setMap(map);
-                                var content = '<p>Username: ' + pplAndPlace.vehicles[count].username + '</br>Distance from me: </p>';
-                                var infoWindow = new google.maps.InfoWindow();
-                                google.maps.event.addListener(weinerMarker, 'click', function(){
-                                    infoWindow.setContent(content);
-                                    infoWindow.open(map, weinerMarker);
-                                });
-                            } else {
-                                var vehicleMarker = new google.maps.Marker({
-                                    position: new google.maps.LatLng(pplAndPlace.vehicles[count].lat, pplAndPlace.vehicles[count].lng),
-                                    icon: 'car.png',
-                                    title: "Vehicle"
-                                });
-                                vehicleMarker.setMap(map);
-                                var content = '<p>Username: ' + pplAndPlace.vehicles[count].username + '</br>Distance from me: </p>';
-                                var infoWindow = new google.maps.InfoWindow();
-                                google.maps.event.addListener(vehicleMarker, 'click', function(){
-                                    infoWindow.setContent(content);
-                                    infoWindow.open(map, vehicleMarker);
-                                });
-                                console.log("in vehicle marker setup");
+                        if (info.vehicles != undefined) {
+                            for (count=0; count < info.vehicles.length; count++){
+                                if (info.vehicles[count].username == "WEINERMOBILE"){
+                                    var weinerMarker = new google.maps.Marker({
+                                        position: new google.maps.LatLng(info.vehicles[count].lat, info.vehicles[count].lng),
+                                        icon: 'weinermobile.png',
+                                        title: "WEINERMOBILE"
+                                    });
+                                    weinerMarker.setMap(map);
+                                    weinerMarker.content = '<p>Username: ' + info.vehicles[count].username + '</br>Distance from me: </p>';
+                                    var infoWindow = new google.maps.InfoWindow();
+                                    google.maps.event.addListener(weinerMarker, 'click', function(){
+                                        infoWindow.setContent(this.content);
+                                        infoWindow.open(map, this);
+                                    });
+                                } else {
+                                    var vehicleMarker = new google.maps.Marker({
+                                        position: new google.maps.LatLng(info.vehicles[count].lat, info.vehicles[count].lng),
+                                        icon: 'car.png',
+                                        title: "Vehicle"
+                                    });
+                                    vehicleMarker.setMap(map);
+                                    vehicleMarker.content = '<p>Username: ' + info.vehicles[count].username + '</br>Distance from me: </p>';
+                                    var infoWindow = new google.maps.InfoWindow();
+                                    google.maps.event.addListener(vehicleMarker, 'click', function(){
+                                        infoWindow.setContent(this.content);
+                                        infoWindow.open(map, this);
+                                    });
+                                }
+                            } 
+                        }else {
+                                for (count=0; count < info.passengers.length; count++){
+                                    if (info.passengers[count].username == "WEINERMOBILE"){
+                                        var weinerMarker = new google.maps.Marker({
+                                            position: new google.maps.LatLng(info.passenegers[count].lat, info.passenegers[count].lng),
+                                            icon: 'weinermobile.png',
+                                            title: "WEINERMOBILE"
+                                        });
+                                        weinerMarker.setMap(map);
+                                        weinerMarker.content = '<p>Username: ' + info.passenegers[count].username + '</br>Distance from me: </p>';
+                                        var infoWindow = new google.maps.InfoWindow();
+                                        google.maps.event.addListener(weinerMarker, 'click', function(){
+                                            infoWindow.setContent(this.content);
+                                            infoWindow.open(map, this);
+                                        });
+                                    } else {
+                                        var passengerMarker = new google.maps.Marker({
+                                            position: new google.maps.LatLng(info.passenegers[count].lat, info.passenegers[count].lng),
+                                            icon: 'car.png',
+                                            title: "Vehicle"
+                                        });
+                                        passenegerMarker.setMap(map);
+                                        passenegerMarker.content = '<p>Username: ' + info.passenegers[count].username + '</br>Distance from me: </p>';
+                                        var infoWindow = new google.maps.InfoWindow();
+                                        google.maps.event.addListener(passenegerMarker, 'click', function(){
+                                            infoWindow.setContent(this.content);
+                                            infoWindow.open(map, this);
+                                        });
+                                }
                             }
                         }
-                        console.log("after for loop");
                     }
                 }
                 console.log("mylat: " + myLat + " mylng: " + myLng);
@@ -112,6 +140,5 @@
 
 <body onload="initMap()">
     <div id="map"></div>
-    <h1>hi world</h1>
 </body>
 </html>
