@@ -7,116 +7,100 @@
     <script>
             var myLat = 000;
             var myLng = 000;
+            var me = 000;
             var map;
+            var infoWindow; // = new google.maps.InfoWindow();
+            var info;
+            var myMarker, weinerMarker, passenegerMarker, vehicleMarker;
             
             function initMap() {
                  map = new google.maps.Map(document.getElementById('map'), {center: {lat: 42.405, lng: -71.119}, zoom: 15});
-                 //use mapOptions to change the lat and long to make more sense later
                  getLocation();
             }
             
             function getLocation() {
-                console.log("in getlocation");
                 navigator.geolocation.getCurrentPosition(function(position){
-                    console.log("in position");
                 myLat = position.coords.latitude;
                 myLng = position.coords.longitude;
-                receiveLocations();
-                console.log("lat and lng are " + myLat + ", " + myLng);
+                renderMap(); 
                 });
             }
 
             function renderMap() {
-                var me = new google.maps.LatLng(myLat, myLng);
-                var infoWindow = new google.maps.InfoWindow();
-               
-                console.log("in render");
-                map.panTo(me);
-                console.log("creating a marker");
-                var myMarker = new google.maps.Marker({
-                    position: me,
-                    icon: 'me.png',
-                    title: "Brita!!"
-                });
-
-                myMarker.setMap(map);
-                var content = '<p>Username: VFadwaWF</br>Location: ' + myLat + ', '+ myLng + '</p>';
+                console.log("in rendermap");
+                me = new google.maps.LatLng(myLat, myLng);
                 
-                google.maps.event.addListener(myMarker, 'click', function(){
-                    infoWindow.setContent(content);
-                    infoWindow.open(map, myMarker);
-                });
-                console.log("before calling receive locations: lat and lng are " + myLat + ", " + myLng);
+                map.panTo(me);
+
+                receiveLocations(); 
             }
 
-            // not receiving json data
             function receiveLocations() {
+
                 request = new XMLHttpRequest();
      
                 request.open("POST", "https://hans-moleman.herokuapp.com/rides", true);
     
                 request.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
-   
+    
                 request.onreadystatechange = function() {
                     if (request.readyState == 4 && request.status == 200) {
                         info = JSON.parse(request.responseText);
                         console.log(info);
-                        console.log(info.vehicles.length);
-                        var count;
                         if (info.vehicles != undefined) {
-                            for (count=0; count < info.vehicles.length; count++){
+                            for (var count=0; count < info.vehicles.length; count++){
                                 if (info.vehicles[count].username == "WEINERMOBILE"){
-                                    var weinerMarker = new google.maps.Marker({
+                                    weinerMarker = new google.maps.Marker({
                                         position: new google.maps.LatLng(info.vehicles[count].lat, info.vehicles[count].lng),
                                         icon: 'weinermobile.png',
                                         title: "WEINERMOBILE"
                                     });
                                     weinerMarker.setMap(map);
-                                    weinerMarker.content = '<p>Username: ' + info.vehicles[count].username + '</br>Distance from me: </p>';
-                                    var infoWindow = new google.maps.InfoWindow();
+                                    weinerMarker.content = '<p>Username: ' + info.vehicles[count].username + '</br>Location: ' + weinerMarker.position + '</p>';
+                                    infoWindow = new google.maps.InfoWindow();
                                     google.maps.event.addListener(weinerMarker, 'click', function(){
                                         infoWindow.setContent(this.content);
                                         infoWindow.open(map, this);
                                     });
                                 } else {
-                                    var vehicleMarker = new google.maps.Marker({
+                                    vehicleMarker = new google.maps.Marker({
                                         position: new google.maps.LatLng(info.vehicles[count].lat, info.vehicles[count].lng),
                                         icon: 'car.png',
                                         title: "Vehicle"
                                     });
                                     vehicleMarker.setMap(map);
-                                    vehicleMarker.content = '<p>Username: ' + info.vehicles[count].username + '</br>Distance from me: </p>';
-                                    var infoWindow = new google.maps.InfoWindow();
+                                    vehicleMarker.content = '<p>Username: ' + info.vehicles[count].username + '</br>Location: ' + vehicleMarker.position + '</p>';
+                                    infoWindow = new google.maps.InfoWindow();
                                     google.maps.event.addListener(vehicleMarker, 'click', function(){
                                         infoWindow.setContent(this.content);
                                         infoWindow.open(map, this);
                                     });
                                 }
                             } 
-                        }else {
+                        } else {
                                 for (count=0; count < info.passengers.length; count++){
                                     if (info.passengers[count].username == "WEINERMOBILE"){
-                                        var weinerMarker = new google.maps.Marker({
+                                        weinerMarker = new google.maps.Marker({
                                             position: new google.maps.LatLng(info.passenegers[count].lat, info.passenegers[count].lng),
                                             icon: 'weinermobile.png',
                                             title: "WEINERMOBILE"
                                         });
-                                        weinerMarker.setMap(map);
-                                        weinerMarker.content = '<p>Username: ' + info.passenegers[count].username + '</br>Distance from me: </p>';
-                                        var infoWindow = new google.maps.InfoWindow();
+                                        weinerMarker.setMap(map); 
+                                        weinerMarker.content = '<p>Username: ' + info.passenegers[count].username + '</br>Location: ' + weinerMarker.position + '</p>';
+                                        infoWindow = new google.maps.InfoWindow();
                                         google.maps.event.addListener(weinerMarker, 'click', function(){
                                             infoWindow.setContent(this.content);
                                             infoWindow.open(map, this);
                                         });
                                     } else {
-                                        var passengerMarker = new google.maps.Marker({
+                                        passengerMarker = new google.maps.Marker({
                                             position: new google.maps.LatLng(info.passenegers[count].lat, info.passenegers[count].lng),
                                             icon: 'car.png',
                                             title: "Vehicle"
                                         });
                                         passenegerMarker.setMap(map);
-                                        passenegerMarker.content = '<p>Username: ' + info.passenegers[count].username + '</br>Distance from me: </p>';
-                                        var infoWindow = new google.maps.InfoWindow();
+                                        passenegerMarker.content = '<p>Username: ' + info.passenegers[count].username + '</br>Location: ' + passengerMarker.position + '</p>';
+                                        infoWindow = new google.maps.InfoWindow();
                                         google.maps.event.addListener(passenegerMarker, 'click', function(){
                                             infoWindow.setContent(this.content);
                                             infoWindow.open(map, this);
@@ -124,15 +108,74 @@
                                 }
                             }
                         }
+                        setMyMarker();
+                        /*var myMarker = new google.maps.Marker({
+                            position: me,
+                            icon: 'me.png',
+                            title: "Brita!!"
+                        });
+
+                        myMarker.setMap(map);
+                        var content = '<p>Username: VFadwaWF</br>Location: ' + myLat + ', '+ myLng + '</p>';
+                
+                        google.maps.event.addListener(myMarker, 'click', function(){
+                            infoWindow.setContent(content);
+                            infoWindow.open(map, myMarker);
+                        }); 
+                        getDistances(); */
                     }
                 }
-                console.log("mylat: " + myLat + " mylng: " + myLng);
                 request.send("username=VFadwaWF&lat="+myLat+"&lng="+myLng);
-                renderMap();
+
             } 
+
+            function setMyMarker() {
+                console.log(info.vehicles.length);
+                myMarker = new google.maps.Marker({
+                    position: me,
+                    icon: 'me.png',
+                    title: "Brita!!"
+                });
+
+                myMarker.setMap(map);
+                myMarker.content = '<p>Username: VFadwaWF</br>Location: ' + myLat + ', '+ myLng + '</p>';
+                
+                google.maps.event.addListener(myMarker, 'click', function(){
+                    infoWindow.setContent(this.content);
+                    infoWindow.open(map, this);
+                }); 
+                getDistances();
+            }
+
+            function getDistances() {
+                console.log("in getdistances");
+                console.log(info.vehicles.length);
+                
+                var weinermobDist = google.maps.geometry.spherical.computeDistanceBetween(me, weinerMarker.position);
+                weinermobDist *= 0.00062137;
+                console.log("the distance is " + weinermobDist);
+                //trial:
+                //var infoWindow = new google.maps.InfoWindow();
+                //var myMarker = new google.maps.Marker({
+                //    position: me,
+                //    icon: 'me.png',
+                //    title: "Brita!!"
+                //});
+
+                //myMarker.setMap(map);
+                //myMarker.content = '<p>Username: VFadwaWF</br>Location: ' + myLat + ', '+ myLng + '</p>';
+                
+                //google.maps.event.addListener(myMarker, 'click', function(){
+                 //   infoWindow.setContent(this.content);
+                //    infoWindow.open(map, this);
+                //});
+                //end trial
+
+            }
+
     </script> 
     
-    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyC9sQaGQMUn1TEZG3C11LjRlpQAppS4WGk&callback=initMap" async defer></script> 
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyC9sQaGQMUn1TEZG3C11LjRlpQAppS4WGk&libraries=geometry&callback=initMap" async defer></script> 
     <!-- link with my API key: (error keeps telling me I need to activate it?)-->
     <!-- <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBwUBWoCug3Rd4myBqKkSHOAc2rCWEYiO0&callback=initMap" async defer></script> -->
 
