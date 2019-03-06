@@ -14,7 +14,7 @@
             var myMarker, weinerMarker, passengerMarker, vehicleMarker;
             var closestToMe = 3970;
             var closestToMeID = "";
-            var temp, weinermobDist;
+            var distanceFromMe, weinermobDist;
             
             function initMap() {
                  map = new google.maps.Map(document.getElementById('map'), {center: {lat: 42.405, lng: -71.119}, zoom: 15});
@@ -51,7 +51,9 @@
                                         title: "WEINERMOBILE"
                                     });
                                     weinerMarker.setMap(map);
-                                    weinerMarker.content = '<p>Username: ' + info.vehicles[count].username + '</br>Location: ' + weinerMarker.position + '</p>';
+                                    weinermobDist = google.maps.geometry.spherical.computeDistanceBetween(me, weinerMarker.position);
+                                    weinermobDist *= 0.00062137;
+                                    weinerMarker.content = 'The Weinermobile is ' + weinermobDist + ' miles away from me!</p>';
                                     infoWindow = new google.maps.InfoWindow();
                                     google.maps.event.addListener(weinerMarker, 'click', function(){
                                         infoWindow.setContent(this.content);
@@ -64,19 +66,16 @@
                                         title: "Vehicle"
                                     });
                                     vehicleMarker.setMap(map);
-                                    weinermobDist = google.maps.geometry.spherical.computeDistanceBetween(me, weinerMarker.position);
-                                    weinermobDist *= 0.00062137;
-                                    weinerMarker.content = 'The Weinermobile is ' + weinermobDist + ' miles away from me!</p>';
+                                    distanceFromMe = google.maps.geometry.spherical.computeDistanceBetween(me, vehicleMarker.position);
+                                    distanceFromMe *= 0.00062137;
                                     infoWindow = new google.maps.InfoWindow();
                                     google.maps.event.addListener(vehicleMarker, 'click', function(){
                                         infoWindow.setContent(this.content);
                                         infoWindow.open(map, this);
                                     });
-                                    temp = google.maps.geometry.spherical.computeDistanceBetween(me, vehicleMarker.position);
-                                    temp *= 0.00062137;
                                 }
-                                if (temp < closestToMe) {
-                                    closestToMe = temp;
+                                if (distanceFromMe < closestToMe) {
+                                    closestToMe = distanceFromMe;
                                     closestToMeID = info.vehicles[count].username;
                                 }
                             }
@@ -104,17 +103,17 @@
                                             title: "Passenger"
                                         });
                                         passengerMarker.setMap(map);
-                                        passengerMarker.content = '<p>Username: ' + info.passengers[count].username + '</br>Location: ' + passengerMarker.position + '</p>';
+                                        distanceFromMe = google.maps.geometry.spherical.computeDistanceBetween(me, passengerMarker.position);
+                                        distanceFromMe *= 0.00062137;
+                                        passengerMarker.content = '<p>Username: ' + info.passengers[count].username + '</br>They are ' + distanceFromMe + ' miles away!</p>';
                                         infoWindow = new google.maps.InfoWindow();
                                         google.maps.event.addListener(passengerMarker, 'click', function(){
                                             infoWindow.setContent(this.content);
                                             infoWindow.open(map, this);
                                         });
-                                        temp = google.maps.geometry.spherical.computeDistanceBetween(me, passengerMarker.position);
-                                        temp *= 0.00062137;
                                     }
-                                    if (temp < closestToMe) {
-                                        closestToMe = temp;
+                                    if (distanceFromMe < closestToMe) {
+                                        closestToMe = distanceFromMe;
                                         closestToMeID = info.passengers[count].username;
                                     }
                                 }
@@ -136,13 +135,10 @@
             }
 
             function getDistances() {
-                //var weinermobDist = google.maps.geometry.spherical.computeDistanceBetween(me, weinerMarker.position);
-                //weinermobDist *= 0.00062137;
-
                 if (info.vehicles != undefined){
-                    myMarker.content = '<p>The Weinermobile is ' + weinermobDist + ' miles away!!</br>The nearest vehicle is ' +closestToMeID + " and they're " + closestToMe + ' miles away!</p>'; 
+                    myMarker.content = '<p>Username: VFadwaWF</br>The Weinermobile is ' + weinermobDist + ' miles away!!</br>The nearest vehicle is ' +closestToMeID + " and they're " + closestToMe + ' miles away!</p>'; 
                 } else {
-                    myMarker.content = '<p>The Weinermobile is ' + weinermobDist + ' miles away!!</br>The nearest passenger is ' +closestToMeID + " and they're " + closestToMe + ' miles away!</p>'; 
+                    myMarker.content = '<p>Username: VFadwaWF</br>The Weinermobile is ' + weinermobDist + ' miles away!!</br>The nearest passenger is ' +closestToMeID + " and they're " + closestToMe + ' miles away!</p>'; 
                 }
 
                 google.maps.event.addListener(myMarker, 'click', function(){
