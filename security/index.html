@@ -4,10 +4,58 @@
 <head>
 <meta charset="uft-8">
 <title>Security Report</title>
+<link rel="stylesheet" href="style.css"/>
 </head>
 
 <body>
+<h2>Security Report: Ugo's A2 and A3</h2>
 
+<p><div class="headers">Introduction</div>I was tasked with testing and analyzing Akwarandu Nwachuku's (Ugo's) work on a knockoff version of Lyft and his server to host that knockoff. The server supported two GET and one POST method, with which input data was stored in a mongoDB database.</p>
+
+<p><div class="headers">Methodology</div>To begin and familiarize myself with his website, I sent data to his server via curl and looked at his webpages. Next I made multiple attempts at an injection attack. I used Burp Suite to try cross site scripting.</p>
+
+<p><div class="headers">Abstract of Findings</div>I could not find security issues with Ugo's work. His code is resistant to two of the most common types of security attacks. However, I identified three security and privacy vulnerabilities and issues. First, Ugo does not protect his webpage from other websites and sources, so a malicious user may be able to commit detrimental actions on the site that Ugo and others may not be aware of. Second, his website displays prior locations of drivers and passengers, which is a major security issue. Last, Ugo's code is not written in the most efficient way, so should there be an uptick in traffic to his website, it may not function properly. </p>
+
+<p><div class="headers">Issues and vulnerabilities</div>The identified issues are listed below with recommendations:</p>
+
+<p>Issue: Cross-Origin Resource Sharing vulnerability</p>
+<ul type="square">
+    <li>Location: POST /rides in server</li>
+    <li>Severity: high; this vulnerability enables malicious script to be run on the site from another source, and the website contains sensitive data (e.g. users' locations)</li>
+    <li>Description: CORS restricts how a document or script is loaded from one origin can interact with a resource from another origin, and without restricting cross-origin sharing, users and their information is vulnerable. </li>
+    <li>Proof:</li>
+    <img src="issue1.png" alt="First issue">
+    <li>Recommendation: disable cross-origin sharing or put additional security in place to protect user information</li>
+</ul>
+
+<p>Issue: Privacy vulnerability</p>
+<ul type="square">
+    <li>Location: homepage and on the '/passenger.json' page when a valid username is put in the query string</li>
+    <li>Severity: high; this vulnerability makes previous users' names, prior locations, and the times they were there easily available, which is a breach in privacy and has safety implications for those users</li>
+    <li>Description: on loading the website, a list of drivers looking for passengers is shown with when and where they were searching for passengers. On the '/passenger.json' page, sending a valid passenger username will result in a list of their previous locations</li>
+    <li>Proof:</li>
+    <img src="issue2.png" alt="Second issue">
+    <li>Recommendation: change the homepage and the list of passengers such that usernames are masked or locations aren't included</li>
+</ul>
+
+<p>Issue: Poor programming practice</p>
+<ul type="square">
+    <li>Location: when checking if the username provided in the HTTP request is a vehicle or a passenger</li>
+    <li>Severity: low; this does not pose any great security or privacy threats, it just may slow down the site if there are a lot of HTTP post requests coming in</li>
+    <li>Description: to check if the user-provided username is a passenger or vehicle, Ugo used a for loop to search the array of vehicles</li>
+    <li>Proof:</li>
+    <img src="issue3.png" alt="Third issue">
+    <li>Recommendation: It could be faster to instead search the list to see if it includes the requested username. For example, 'if (array.includes(username)' could work better</li>
+</ul>
+
+<p><div class="headers">Conclusion</div>There are some security and privacy vulnerabilities that arise from cross-origin resource sharing allowances and sensitive user data that is being shared, but Ugo's work is secure and resisted injection and cross site scripting attacks. In the future CORS adjustments should be made and sensitive user data (e.g. location information) should not be displayed to anyone who can access the website.</p>
+
+<p><div class="headers">References</div>Below are the sites I accessed to better understand the assignment</p>
+<ul type="square">
+    <li><a href="https://developer.mozilla.org/en-US/docs/Web/HTTP/CORS">CORS information</a></li>
+    <li><a href="https://www.veracode.com/security/xss">Cross site scripting</a></li>
+    <li><a href="https://blog.websecurify.com/2014/08/hacking-nodejs-and-mongodb.html">Injection information</a></li>
+</ul>
 
 </body>
 </html>
